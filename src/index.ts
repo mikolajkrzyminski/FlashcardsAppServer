@@ -1,11 +1,20 @@
+import 'dotenv/config'
 import express from "express";
 // create expresss aplication
 const app = express();
 
+import connectDB from './utils/connect';
 import router from "./routes";
 
 app.use("/", router);
 
-const port = 8000;
+const port = process.env.PORT;
+// avoid compilation error
+let mongo_uri: string = process.env.MONGO_URI || "";
 
-app.listen(port, () => console.log(`App listen on PORT ${port}`));
+app.listen(port, async () => {
+    console.log(`App listen on PORT ${port}`);
+
+
+    await connectDB(mongo_uri);
+});
