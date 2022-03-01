@@ -16,5 +16,5 @@ app.listen(port, async () => {
     console.log(`App listen on PORT ${port}`);
 
     // connect to db
-    await connectDB(mongo_uri);
+    // await connectDB(mongo_uri);
 });
