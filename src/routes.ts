@@ -6,7 +6,7 @@ const router = express.Router();
 
 // routes
 
-router.get('/languages', (req, res) => {
+router.get('/', (req, res) => {
     res.json({ langs: getLanguages() });
 });
 
