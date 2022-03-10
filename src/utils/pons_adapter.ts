@@ -16,4 +16,15 @@ function getDictsLangs(serviceData: PonsDict[]): string[] {
     return Array.from(langsSet, function mapFn(elem) { return String(elem) });
 }
 
-export { getDictsLangs };
+function getLangsLabels(serviceData: PonsDict[]): any[] {
+    var langsLabelsSet = new Set();
+    serviceData.map(ponsDict => {
+        const labelsTemp = ponsDict.simple_label.split(" «» ");
+        for (let i = 0; i < ponsDict.languages.length; i++) {
+            langsLabelsSet.add({ [ponsDict.languages[i]]: labelsTemp[i] });
+        }
+    });
+    return Array.from(langsLabelsSet);
+}
+
+export { getDictsLangs, getLangsLabels };
