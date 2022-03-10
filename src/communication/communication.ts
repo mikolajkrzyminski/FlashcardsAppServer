@@ -1,6 +1,14 @@
 import 'dotenv/config'
 const axios = require('axios').default;
 
+import { getDictsLangs } from '../utils/pons_adapter';
+
+interface PageData {
+    langs: string[];
+    labels: object;
+    directed_dicts: object[];
+}
+
 // supported languages of service response
 const languages = ['de', 'el', 'en', 'es', 'fr', 'it', 'pl', 'pt', 'ru', 'sl', 'tr', 'zh'];
 
@@ -16,19 +24,20 @@ function getLanguages(): string[] {
 
 // returns all dictionaries available in service
 async function getDictArray(lang?: string): Promise<any> {
-    var resultArray;
+    var resultObject;
+    // get request to external service
     try {
         const response = await axios.get(urlGetDicts, {
             params: {
                 language: lang
             }
         });
-        resultArray = response.data;
+        // get all source languages
+        const dictsLangs = getDictsLangs(response);
     } catch (error) {
-        resultArray = [];
+        resultObject = [];
     }
-    return resultArray;
-
+    return resultObject;
 }
 
 // returns translation of search phrase

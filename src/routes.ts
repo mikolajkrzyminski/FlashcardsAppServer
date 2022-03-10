@@ -5,14 +5,13 @@ import { getLanguages, getDictArray, getTranslation } from "./communication/comm
 const router = express.Router();
 
 // routes
-
-router.get('/', (req, res) => {
+router.get('/pageLangs', (req, res) => {
     res.json({ langs: getLanguages() });
 });
 
-router.get('/dictionaries', async (req, res) => {
+router.get('/dictionaryData', async (req, res) => {
     // set site language
-    let language = req.query.language_id as string;
+    let language = req.query.lang as string;
 
     // get available dictionaries in given language
     const dicts = await getDictArray(language);
