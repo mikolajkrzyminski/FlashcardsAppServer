@@ -1,7 +1,7 @@
 import 'dotenv/config'
 const axios = require('axios').default;
 
-import { getDictsLangs, getLangsLabels } from '../utils/pons_adapter';
+import { getDictsLangs, getLangsLabels, getDicts } from '../utils/pons_adapter';
 
 interface PageData {
     langs: string[];
@@ -38,6 +38,9 @@ async function getDictArray(lang?: string): Promise<any> {
         console.log(dictsLangs);
         const langsLabels = getLangsLabels(serviceData);
         console.log(langsLabels);
+        const directedDicts = getDicts(serviceData);
+        console.log(directedDicts);
+
     } catch (error) {
         resultObject = [];
     }
