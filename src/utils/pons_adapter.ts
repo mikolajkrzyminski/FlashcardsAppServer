@@ -1,4 +1,3 @@
-import { getDictArray } from "../communication/communication";
 const _ = require("lodash");
 
 interface PonsDict {
@@ -32,10 +31,8 @@ function getLangsLabels(ponsDict: PonsDict): any {
     var langsLabelsSet = new Set();
     const labelsTemp = ponsDict.simple_label.split(" «» ");
     if (ponsDict.languages.length === 2) {
-        langsLabelsSet.add({ [ponsDict.languages[0]]: labelsTemp[0] });
-        langsLabelsSet.add({ [ponsDict.languages[0]]: labelsTemp[0] });
-    }
-    for (let i = 0; i < ponsDict.languages.length; i++) {
+        langsLabelsSet.add({ lang: ponsDict.languages[0], label: labelsTemp[0] });
+        langsLabelsSet.add({ lang: ponsDict.languages[1], label: labelsTemp[1] });
     }
 
     return langsLabelsSet;
@@ -54,6 +51,13 @@ function getDicts(ponsDict: PonsDict): Dictionary[] {
 
 // returns data used in frontend
 function getPageData(serviceData: PonsDict[]): PageData {
+    if (!serviceData) {
+        return {
+            langs: [],
+            labels: [],
+            directed_dicts: []
+        }
+    }
     var langsSet = new Set();
     var langsLabelsArray = new Array();
     var resultdictsArray = new Array();
@@ -69,11 +73,10 @@ function getPageData(serviceData: PonsDict[]): PageData {
     // creates unique array of objects with language and label
     resultlangsLabels = _.uniqWith(langsLabelsArray, _.isEqual);
     var pageDate: PageData = {
-        langs: Array.from(langsSet, function mapFn(elem) { return String(elem) }),
-        labels: Array.from(resultlangsLabels),
-        directed_dicts: resultdictsArray,
+        langs: Array.from(langsSet, function mapFn(elem) { return String(elem) }) ?? [],
+        labels: Array.from(resultlangsLabels) ?? [],
+        directed_dicts: resultdictsArray ?? [],
     }
-    console.log(pageDate);
     return pageDate;
 }
 

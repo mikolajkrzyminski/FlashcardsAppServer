@@ -23,25 +23,18 @@ function getLanguages(): string[] {
 }
 
 // returns all dictionaries available in service
-async function getDictArray(lang?: string): Promise<any> {
+async function getDictsData(lang?: string): Promise<any> {
     var resultObject;
     // get request to external service
     try {
         const response = await axios.get(urlGetDicts, {
             params: {
-                language: lang
+                // checks if given language is supported (is in languages array)
+                language: languages.includes(lang as string) ? lang : languages[2]
             }
         });
         const serviceData = response.data;
-        // get all source languages
-        //const dictsLangs = getDictsLangs(serviceData);
-        //console.log(dictsLangs);
-        //const langsLabels = getLangsLabels(serviceData);
-        //console.log(langsLabels);
-        //const directedDicts = getDicts(serviceData);
-        //console.log(directedDicts);
-        console.log(getPageData(serviceData));
-
+        resultObject = getPageData(serviceData);
     } catch (error) {
         resultObject = [];
     }
@@ -49,7 +42,7 @@ async function getDictArray(lang?: string): Promise<any> {
 }
 
 // returns translation of search phrase
-async function getTranslation(searchPhrase: string, dictionary: string, sourceLang: string): Promise<any> {
+async function getTranslation(searchPhrase: string, sourceLang: string, targetLang: string): Promise<any> {
     var resultArray: any[] = [];
     try {
         let config = {
@@ -58,7 +51,7 @@ async function getTranslation(searchPhrase: string, dictionary: string, sourceLa
             },
             params: {
                 q: searchPhrase,
-                l: dictionary,
+                l: getDictName(sourceLang, targetLang),
                 in: sourceLang,
             }
         };
@@ -75,10 +68,15 @@ async function getTranslation(searchPhrase: string, dictionary: string, sourceLa
     return resultArray;
 }
 
+// returns concatenation in alphabetical order
+function getDictName(first: string, second: string): string {
+    return first < second ? first + second : second + first
+}
+
 // regex for removing hmtl tags from response
 function RemoveHTMLTags(html) {
     var regX = /(<([^>]+)>)/ig;
     return html.replace(regX, "");
 }
 
-export { getLanguages, getDictArray, getTranslation };
+export { getLanguages, getDictsData, getTranslation };
