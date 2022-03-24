@@ -4,9 +4,7 @@ import express from "express";
 const app = express();
 
 import connectDB from './utils/connect';
-import router from "./routes";
-
-app.use("/", router);
+import router from './routes/routes'
 
 const port = process.env.PORT;
 // avoid compilation error
@@ -17,4 +15,8 @@ app.listen(port, async () => {
 
     // connect to db
     await connectDB(mongo_uri);
+
+    app.use(express.json());
+
+    app.use("/", router);
 });
