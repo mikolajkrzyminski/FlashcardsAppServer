@@ -4,7 +4,8 @@ import express from "express";
 const app = express();
 
 import connectDB from './utils/connect';
-import router from './routes/routes'
+import routerPageData from './routes/page_data.routes'
+import routerFlashcards from './routes/flashcard.routes'
 
 const port = process.env.PORT;
 // avoid compilation error
@@ -18,5 +19,7 @@ app.listen(port, async () => {
 
     app.use(express.json());
 
-    app.use("/", router);
+    app.use("/", routerPageData);
+    app.use("/flashcards", routerFlashcards);
+
 });
